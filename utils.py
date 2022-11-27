@@ -36,6 +36,13 @@ def compute_fitness(args, gene, dist):
 def get_dist(cities, i, j):
     return np.sqrt(np.square(cities[i][0] - cities[j][0]) + np.square(cities[i][1] - cities[j][1]))
 
+def get_sort(group):
+    for i in range(1, len(group)):
+        for j in range(0, len(group) - i):
+            if group[j]['fit'] > group[j + 1]['fit']:
+                group[j], group[j + 1] = group[j + 1], group[j]
+    return group
+
 def draw_cities(args, cities):
     plt.figure()
     plt.scatter(cities[:, 0], cities[:, 1])
@@ -49,7 +56,7 @@ def draw_route(args, result):
     plt.plot(result[:, 0], result[:, 1])
     plt.title("Route Result")
     plt.legend()
-    plt.savefig("route_{}_1.jpg".format(args.pn))
+    plt.savefig("route_{}.jpg".format(args.pn))
     plt.close()
 
 
