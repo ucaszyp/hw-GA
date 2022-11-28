@@ -61,8 +61,10 @@ def draw_route(args, result):
 
 
 def draw_fitness(args, fitness_list):
+    max_fit = max(fitness_list)
+    min_fit = min(fitness_list)
     plt.figure()
-    plt.ylim(130, 350)
+    plt.ylim(min_fit - 10, max_fit + 10)
     plt.plot(fitness_list)
     plt.title("Fitness Result")
     plt.legend()

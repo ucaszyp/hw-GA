@@ -12,7 +12,7 @@ def parse_args():
     parser.add_argument('--n', type=int, default=30, help='the amount of cities')
     parser.add_argument('--pn', type=int, default=30, help='the amount of individual in population')
     parser.add_argument('--iters', type=int, default=1000, help='generation num')
-    parser.add_argument('--variation_prob', type=float, default=0.3, help='probability of mutate')
+    parser.add_argument('--variation_prob', type=float, default=0.5, help='probability of mutate')
     parser.add_argument('--cross_prob', type=float, default=0.99, help='probability of cross')
     parser.add_argument('--choice', type=str, default="championship", help='roulette of championship')
     parser.add_argument('--gn', type=int, default=10, help='group size for championship')

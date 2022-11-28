@@ -1,5 +1,6 @@
 import random
 from utils import *
+from tqdm import tqdm
 
 class GA:
     def __init__(self, args, pop, dist):
@@ -66,7 +67,7 @@ class GA:
                 ind["gene"] = old_gene[:begin_idx] + gene_variation + old_gene[end_idx:]
 
         self.pop += self.new_ind
-        print(len(self.pop))
+
         # choose
         if self.args.choice == "championship":
             group_winner = self.args.pn // self.args.gn
@@ -82,14 +83,22 @@ class GA:
 
         elif self.args.choice == 'roulette':
             self.cities_prob = [(1 / self.pop[i]["fit"]) for i in range(len(self.pop))]
-            print(self.cities_prob)
-            prob_max = max(self.cities_prob)
-            prob_min = min(self.cities_prob)
-            for i in range(len(self.pop)):
-                self.cities_prob[i] = (self.cities_prob[i] - prob_min) / (prob_max - prob_min)
+
             total_prob = sum(self.cities_prob)
-            print(total_prob)
-            assert total_prob == 1
+            roulette = []
+            new_pop = []
+
+            while len(new_pop) < 30:
+                temp_prob = random.uniform(0.0, total_prob)
+                for j in range(len(self.pop)):
+                    temp_prob -= self.cities_prob[j]
+                    if temp_prob < 0 and j not in roulette:  
+                        roulette.append(j)
+                        new_pop.append(self.pop[j])
+                        break
+
+            self.pop = new_pop
+
         # update
         for ind in self.pop:
             if ind['fit'] < self.best['fit']:
@@ -97,13 +106,9 @@ class GA:
         
         self.new_ind = []
 
-
-
-
-
     def train(self):
         # gen
-        for i in range(self.args.iters):
+        for i in tqdm(range(self.args.iters)):
             self.gen()
             result = self.best['gene'].copy()
             result.append(result[0])
