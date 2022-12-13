@@ -1,4 +1,5 @@
 from ga import GA
+from hm import HM
 import argparse
 from utils import *
 import numpy as np
@@ -6,9 +7,11 @@ import random
 
 
 
+
 def parse_args():
     parser = argparse.ArgumentParser(description='')
     parser.add_argument('--seed', type=int, default=2, help='random seed')
+    parser.add_argument('--algorithm', type=str, choices=['ga', 'hm'])
     parser.add_argument('--n', type=int, default=30, help='the amount of cities')
     parser.add_argument('--pn', type=int, default=30, help='the amount of individual in population')
     parser.add_argument('--iters', type=int, default=1000, help='generation num')
@@ -28,16 +31,22 @@ if __name__ == '__main__':
     np.random.seed(args.seed)
     
     # init cities
-    citys, dist = init_graph(args)
-    draw_cities(args, citys)
+    cities, dist = init_graph(args)
+    print(cities)
+    draw_cities(args, cities)
 
     pop = init_pop(args, dist)
 
+    result = 0
+    result_pos_list = []
+    if args.algorithm == "ga":
+        ga = GA(args, pop, dist)
+        result, fitness = ga.train()
+        result = result[-1]
+        result_pos_list = cities[result, :]
 
-    ga = GA(args, pop, dist)
-    result, fitness = ga.train()
-    result = result[-1]
-    result_pos_list = citys[result, :]
+    elif args.algorithm == "hm":
+        hm = HM(args, dist)
     print(result)
     print(result_pos_list)
 

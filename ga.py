@@ -68,7 +68,7 @@ class GA:
 
         self.pop += self.new_ind
 
-        # choose
+        # select
         if self.args.choice == "championship":
             group_winner = self.args.pn // self.args.gn
             winners = []
