@@ -11,14 +11,16 @@ import random
 def parse_args():
     parser = argparse.ArgumentParser(description='')
     parser.add_argument('--seed', type=int, default=2, help='random seed')
-    parser.add_argument('--algorithm', type=str, choices=['ga', 'hm'])
-    parser.add_argument('--n', type=int, default=30, help='the amount of cities')
+    parser.add_argument('--algorithm', type=str, choices=['ga', 'hm'], default='hm')
+    parser.add_argument('--n', type=int, default=10, help='the amount of cities')
     parser.add_argument('--pn', type=int, default=30, help='the amount of individual in population')
-    parser.add_argument('--iters', type=int, default=1000, help='generation num')
+    parser.add_argument('--iters', type=int, default=100000, help='generation num')
     parser.add_argument('--variation_prob', type=float, default=0.5, help='probability of mutate')
     parser.add_argument('--cross_prob', type=float, default=0.99, help='probability of cross')
     parser.add_argument('--choice', type=str, default="championship", help='roulette of championship')
     parser.add_argument('--gn', type=int, default=10, help='group size for championship')
+    parser.add_argument('--u0', type=float, default=0.0009)
+    parser.add_argument('--eta', type=float, default=0.0001, help='step for update u')
     args = parser.parse_args()
     return args
 
@@ -43,15 +45,16 @@ if __name__ == '__main__':
         ga = GA(args, pop, dist)
         result, fitness = ga.train()
         result = result[-1]
-        result_pos_list = cities[result, :]
+        draw_fitness(args, fitness)
 
     elif args.algorithm == "hm":
         hm = HM(args, dist)
-    print(result)
-    print(result_pos_list)
-
+        energy, result = hm.train()
+        draw_fitness(args, energy)
+    
+    result_pos_list = cities[result, :]
     draw_route(args, result_pos_list)
-    draw_fitness(args, fitness)
+    
 
 
 

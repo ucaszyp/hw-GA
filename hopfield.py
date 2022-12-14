@@ -1,14 +1,3 @@
-'''
-连续型——Hopfield神经网络求解TSP
-1、初始化权值（A,D,U0）
-2、计算N个城市的距离矩阵dxy
-3、初始化神经网络的输入电压Uxi和输出电压Vxi
-4、利用动力微分方程计算：dUxi/dt
-5、由一阶欧拉方法更新计算：Uxi(t+1) = Uxi(t) + dUxi/dt * step
-6、由非线性函数sigmoid更新计算：Vxi(t) = 0.5 * (1 + th(Uxi/U0))
-7、计算能量函数E
-8、检查路径是否合法
-'''
 import numpy as np
 from matplotlib import pyplot as plt
 # 代价函数（具有三角不等式性质）
@@ -141,8 +130,7 @@ if __name__ == '__main__':
     else:
         print('没有找到最优解')
 
-import numpy as np
-from matplotlib import pyplot as plt
+
         
 
 
