@@ -20,7 +20,7 @@ class HM:
         else:
             return 0
 
-    def calc_du(self, v, distance):
+    def calc_du(self, v):
         a = np.sum(v, axis=0) - 1
         b = np.sum(v, axis=1) - 1
         A = self.args.n * self.args.n
@@ -37,7 +37,7 @@ class HM:
         c_0 = np.zeros((self.args.n, 1))
         c_0[:, 0] = v[:, 0]
         c = np.concatenate((c_1, c_0), axis=1)
-        c = np.dot(distance, c)
+        c = np.dot(self.dist, c)
         return -A * (t1 + t2) - D * c
 
     def update_u(self, u, du):
@@ -46,7 +46,7 @@ class HM:
     def update_v(self, u):
         return 1 / 2 * (1 + np.tanh(u / self.u0))
 
-    def calc_energy(self, v, distance):
+    def calc_energy(self, v):
         A = self.args.n * self.args.n
         D = self.args.n / 2
         t1 = np.sum(np.power(np.sum(v, axis=0) - 1, 2))
@@ -54,7 +54,7 @@ class HM:
         idx = [i for i in range(1, self.args.n)]
         idx = idx + [0]
         Vt = v[:, idx]
-        t3 = distance * Vt
+        t3 = self.dist * Vt
         t3 = np.sum(np.sum(np.multiply(v, t3)))
         e = 0.5 * (A * (t1 + t2) + D * t3)
         self.energy.append(e)
@@ -69,21 +69,19 @@ class HM:
                     newV[j, i] = 1
                     route += [j]
                     break
-        return route, newV
+        return route
 
     def train(self):
-
-        distance = self.dist
         
         u = 1 / 2 * self.u0 * np.log(self.args.n - 1) + (2 * (np.random.random((self.args.n, self.args.n))) - 1)
         v = self.update_v(u)
         H_path = []
         for i in tqdm(range(self.args.iters)):
-            du = self.calc_du(v, distance)
+            du = self.calc_du(v)
             u = self.update_u(u, du)
             v = self.update_v(u)
-            self.calc_energy(v, distance)
-            route, newV = self.check_path(v)
+            self.calc_energy(v)
+            route = self.check_path(v)
             
             if len(np.unique(route)) == self.args.n:
                 route.append(route[0])
