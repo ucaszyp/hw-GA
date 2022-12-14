@@ -37,11 +37,11 @@ if __name__ == '__main__':
     print(cities)
     draw_cities(args, cities)
 
-    pop = init_pop(args, dist)
-
     result = 0
     result_pos_list = []
+
     if args.algorithm == "ga":
+        pop = init_pop(args, dist)
         ga = GA(args, pop, dist)
         result, fitness = ga.train()
         result = result[-1]
