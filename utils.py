@@ -48,7 +48,7 @@ def draw_cities(args, cities):
     plt.scatter(cities[:, 0], cities[:, 1])
     plt.title("Cityes")
     plt.legend()
-    plt.savefig("city_{}.jpg".format(args.pn))
+    plt.savefig("vis/city_{}_{}.jpg".format(args.algorithm, args.n))
     plt.close()
 
 def draw_route(args, result):
@@ -56,7 +56,7 @@ def draw_route(args, result):
     plt.plot(result[:, 0], result[:, 1])
     plt.title("Route Result")
     plt.legend()
-    plt.savefig("route_{}.jpg".format(args.pn))
+    plt.savefig("vis/route_{}_{}.jpg".format(args.algorithm, args.n))
     plt.close()
 
 
@@ -66,7 +66,13 @@ def draw_fitness(args, fitness_list):
     plt.figure()
     plt.ylim(min_fit - 10, max_fit + 10)
     plt.plot(fitness_list)
-    plt.title("Fitness Result")
+    if args.algorithm == 'ga':
+        plt.title("Fitness Result")
+    elif args.algorithm == 'hm':
+        plt.title("Energy Result")
     plt.legend()
-    plt.savefig("fitness_{}.jpg".format(args.pn))
+    if args.algorithm == 'ga':
+        plt.savefig("vis/fitness_{}_{}.jpg".format(args.algorithm, args.n))
+    elif args.algorithm == 'hm':
+        plt.savefig("vis/energy_{}_{}.jpg".format(args.algorithm, args.n))
     plt.close()
