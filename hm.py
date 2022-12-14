@@ -78,7 +78,7 @@ class HM:
         u = 1 / 2 * self.u0 * np.log(self.args.n - 1) + (2 * (np.random.random((self.args.n, self.args.n))) - 1)
         v = self.update_v(u)
         H_path = []
-        for n in tqdm(range(self.args.iters)):
+        for i in tqdm(range(self.args.iters)):
             du = self.calc_du(v, distance)
             u = self.update_u(u, du)
             v = self.update_v(u)
